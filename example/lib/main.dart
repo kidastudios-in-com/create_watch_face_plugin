@@ -19,6 +19,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   final _createWatchFacePlugin = CreateWatchFacePlugin();
+  final link =
+      'https://s117.convertio.me/p/a4k-p9rBiOerzFv0bqlGQg/8c0c0390e778ce3c42c7c9fddea96954/200w.heic';
 
   @override
   void initState() {
@@ -59,7 +61,7 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: [
               Image.network(
-                "https://wallpapers.com/images/hd/cute-apple-watch-face-gradient-3tc9hq3s11z724p6.jpg",
+                link,
                 height: 200,
               ),
               Text('Running on: $_platformVersion\n'),
@@ -67,10 +69,10 @@ class _MyAppState extends State<MyApp> {
                 child: const Text("Add To 🍎 Watch"),
                 onPressed: () async {
                   final byteData = await NetworkAssetBundle(Uri.parse(
-                          'https://wallpapers.com/images/hd/cute-apple-watch-face-gradient-3tc9hq3s11z724p6.jpg'))
+                          link))
                       .load('');
 
-                  final result = await _createWatchFacePlugin.shareImages(listOfImagesInBytes: [byteData.buffer.asUint8List(), byteData.buffer.asUint8List()]);
+                  final result = await _createWatchFacePlugin.shareImage(imageInBytes: byteData.buffer.asUint8List());
                   debugPrint("Result: $result");
                 },
               ),
