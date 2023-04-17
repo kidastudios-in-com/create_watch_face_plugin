@@ -36,7 +36,7 @@ public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
             result("\(UIDevice.current.systemVersion), \(UIDevice.current.systemName)")
             return
         }
- 
+        
         if call.method != "create_watch_face_plugin" {
             result(FlutterMethodNotImplemented)
             return
@@ -124,12 +124,10 @@ class ShareModel {
     // function to show acitivity controller with the activity items
     private func ShowActivityController(_ activityItems: [Any]) {
         let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        if activityViewController.excludedActivityTypes == nil {
-            activityViewController.excludedActivityTypes = [.assignToContact]
-        } else {
-            activityViewController.excludedActivityTypes?.append(.assignToContact)
-        }
-        activityViewController.popoverPresentationController?.sourceView = self.viewController.view // to make sure iPad doesn't crash
+        activityViewController.excludedActivityTypes = [.assignToContact, .mail, .addToReadingList, .mail, .openInIBooks, .postToVimeo, .postToWeibo, .postToFlickr, .postToTwitter, .postToFacebook, .markupAsPDF]
+        
+        // to make sure iPad doesn't crash
+        activityViewController.popoverPresentationController?.sourceView = self.viewController.view
         
         // present the view controller
         self.viewController.present(activityViewController, animated: true, completion: {
