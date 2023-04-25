@@ -26,4 +26,16 @@ class MethodChannelCreateWatchFacePlugin extends CreateWatchFacePluginPlatform {
     final completion = await methodChannel.invokeMethod<bool>('create_watch_face_plugin', listOfImagesInBytes) ?? false;
     return completion;
   }
+
+  @override
+  Future<String> createWatchFaceButton({required dynamic watchFace}) async {
+    final completion = await methodChannel.invokeMethod<String>('try_watch_face', watchFace);
+    return completion.toString();
+  }
+
+  @override
+  Future<bool> shareAppStoreLink({required String appId}) async {
+    final completion = await methodChannel.invokeMethod<bool>('open_app_in_store', appId);
+    return completion ?? false;
+  }
 }

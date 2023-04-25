@@ -1,26 +1,24 @@
 import Flutter
 import UIKit
+import ClockKit
 
 public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
+    // MARK: - function to get UIViewController
     private static func RootViewController() -> UIViewController? {
         var rootViewController: UIViewController? = nil
-        if #available(iOS 13.0, *) {
-            let scenes = UIApplication.shared.connectedScenes
-            scenes.forEach { connectedScene in
-                if connectedScene is UIWindowScene {
-                    guard let connectedWindowScene = connectedScene as? UIWindowScene else {
-                        return
-                    }
-                    let windows = connectedWindowScene.windows
-                    windows.forEach { uiWindow in
-                        if uiWindow.isKeyWindow {
-                            rootViewController = uiWindow.rootViewController
-                        }
+        let scenes = UIApplication.shared.connectedScenes
+        scenes.forEach { connectedScene in
+            if connectedScene is UIWindowScene {
+                guard let connectedWindowScene = connectedScene as? UIWindowScene else {
+                    return
+                }
+                let windows = connectedWindowScene.windows
+                windows.forEach { uiWindow in
+                    if uiWindow.isKeyWindow {
+                        rootViewController = uiWindow.rootViewController
                     }
                 }
             }
-        } else {
-            rootViewController = UIApplication.shared.keyWindow?.rootViewController
         }
         return rootViewController
     }
@@ -37,31 +35,86 @@ public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
             return
         }
         
-        if call.method != "create_watch_face_plugin" {
-            result(FlutterMethodNotImplemented)
-            return
-        }
-        
         guard let rootViewController = CreateWatchFacePlugin.RootViewController() else {
             result(FlutterError(code: "No root view controller", message: "No root view controller found!", details: nil))
             return
         }
         
-        let shareModel = ShareModel(rootViewController, result)
-        shareModel.validateArgumentsAndCallFunction("create_watch_face_plugin", call: call)
+        let shareModel = ShareModel(call, rootViewController, result)
+        
+        if call.method == "open_app_in_store" {
+            shareModel.validateArgumentsForAppStoreLink()
+            return
+        }
+        
+        if call.method == "try_watch_face" {
+            shareModel.validateArgumentsForWatchFaceFile()
+            return
+        }
+        
+        if call.method != "create_watch_face_plugin" {
+            result(FlutterMethodNotImplemented)
+            return
+        }
+        
+        shareModel.validateArgumentsAndCallFunction("create_watch_face_plugin")
     }
 }
 
 class ShareModel {
     let viewController: UIViewController
     let result: FlutterResult
+    let call: FlutterMethodCall
+    private let watchFaceLibrary = CLKWatchFaceLibrary()
     
-    init(_ viewController: UIViewController, _ flutterResult: @escaping FlutterResult) {
+    init(_ call: FlutterMethodCall, _ viewController: UIViewController, _ flutterResult: @escaping FlutterResult) {
+        self.call = call
         self.viewController = viewController
         self.result = flutterResult
     }
     
-    func validateArgumentsAndCallFunction(_ methodName: String, call: FlutterMethodCall) -> Void {
+    // MARK: - This function is for validation argument for app store link and sharing
+    func validateArgumentsForAppStoreLink() {
+        if call.arguments == nil {
+            result(FlutterError(code: "UNAVAILABLE", message: "No Arguments sent", details: nil))
+            return
+        }
+        guard let appId = call.arguments as? String else {
+            result(FlutterError(code: "UNAVAILABLE", message: "Arguments were of wrong type", details: nil))
+            return
+        }
+        
+        if let url = URL(string: "itms-apps://itunes.apple.com/app/\(appId)") {
+            UIApplication.shared.open(url)
+            result(true)
+        } else {
+            result(FlutterError(code: "UNAVAILABLE", message: "Wrong id sent", details: nil))
+        }
+    }
+    
+    // MARK: - This function is for validating arguments for watch face file and add that to watch
+    func validateArgumentsForWatchFaceFile() {
+        if call.arguments == nil {
+            result(FlutterError(code: "UNAVAILABLE", message: "No Arguments sent", details: nil))
+            return
+        }
+        guard let arguments = call.arguments as? String else {
+            result(FlutterError(code: "UNAVAILABLE", message: "Arguments were of wrong type", details: nil))
+            return
+        }
+        
+        let watchFaceURL = URL(fileURLWithPath: arguments)
+        watchFaceLibrary.addWatchFace(at: watchFaceURL) { err in
+            if err != nil {
+                self.result("Error: \(String(describing: err))")}
+            else {
+                self.result("Success!")
+            }
+        }
+    }
+    
+    // MARK: - This function is to valid arguments for images and call respective one
+    func validateArgumentsAndCallFunction(_ methodName: String) -> Void {
         guard call.method == methodName else {
             self.result(FlutterMethodNotImplemented)
             return
@@ -95,7 +148,7 @@ class ShareModel {
         }
     }
     
-    // function to share multiple images
+    // MARK: - function to share multiple images
     private func shareImages(images: [FlutterStandardTypedData]) {
         // set up images to be shared
         var imagesToShare: [UIImage] = []
@@ -110,7 +163,7 @@ class ShareModel {
         ShowActivityController(imagesToShare)
     }
     
-    // function to share image only
+    // MARK: - function to share image only
     private func shareImage(imageBytes: FlutterStandardTypedData) {
         // image to share
         guard let imageToShare = UIImage(data: imageBytes.data) else {
@@ -121,7 +174,7 @@ class ShareModel {
         ShowActivityController([imageToShare])
     }
     
-    // function to show acitivity controller with the activity items
+    // MARK: - function to show acitivity controller with the activity items
     private func ShowActivityController(_ activityItems: [Any]) {
         let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         activityViewController.excludedActivityTypes = [.assignToContact, .mail, .addToReadingList, .mail, .openInIBooks, .postToVimeo, .postToWeibo, .postToFlickr, .postToTwitter, .postToFacebook, .markupAsPDF]

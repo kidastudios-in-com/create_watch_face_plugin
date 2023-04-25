@@ -36,4 +36,12 @@ abstract class CreateWatchFacePluginPlatform extends PlatformInterface {
   Future<bool> shareImages({required List<Uint8List> listOfImagesInBytes}) {
     throw UnimplementedError('method has not been implemented.');
   }
+
+  Future<String> createWatchFaceButton({required dynamic watchFace}) {
+    throw UnimplementedError('method has not been implemented.');
+  }
+
+  Future<bool> shareAppStoreLink({required String appId}) {
+    throw UnimplementedError('method has not been implemented.');
+  }
 }

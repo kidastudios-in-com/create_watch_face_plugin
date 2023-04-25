@@ -15,4 +15,12 @@ class CreateWatchFacePlugin {
   Future<String?> getPlatformVersion() {
     return CreateWatchFacePluginPlatform.instance.getPlatformVersion();
   }
+
+  Future<String> createWatchFaceButton({required dynamic watchFace}) {
+    return CreateWatchFacePluginPlatform.instance.createWatchFaceButton(watchFace: watchFace);
+  }
+
+  Future<bool> shareAppStoreLink({required String appId}) {
+    return CreateWatchFacePluginPlatform.instance.shareAppStoreLink(appId: appId);
+  }
 }
