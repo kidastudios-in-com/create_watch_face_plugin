@@ -23,4 +23,8 @@ class CreateWatchFacePlugin {
   Future<bool> shareAppStoreLink({required String appId}) {
     return CreateWatchFacePluginPlatform.instance.shareAppStoreLink(appId: appId);
   }
+
+  Future<bool> shareThisApp({required String appId}) {
+    return CreateWatchFacePluginPlatform.instance.shareThisApp(appId: appId);
+  }
 }

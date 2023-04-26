@@ -42,6 +42,11 @@ public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
         
         let shareModel = ShareModel(call, rootViewController, result)
         
+        if call.method == "share_this_app" {
+            shareModel.shareThisApp()
+            return
+        }
+        
         if call.method == "open_app_in_store" {
             shareModel.validateArgumentsForAppStoreLink()
             return
@@ -71,6 +76,25 @@ class ShareModel {
         self.call = call
         self.viewController = viewController
         self.result = flutterResult
+    }
+    
+    // MARK: - This functions is for sharing the currently open app
+    func shareThisApp() {
+        if call.arguments == nil {
+            result(FlutterError(code: "UNAVAILABLE", message: "No Arguments sent", details: nil))
+            return
+        }
+        guard let appId = call.arguments as? String else {
+            result(FlutterError(code: "UNAVAILABLE", message: "Arguments were of wrong type", details: nil))
+            return
+        }
+        
+        guard let url = URL(string: "https://apps.apple.com/app/drop-dodge/\(appId)") else {
+            result(FlutterError(code: "UNAVAILABLE", message: "Wrong id sent", details: nil))
+            return
+        }
+        ShowActivityController([url])
+        result(true)
     }
     
     // MARK: - This function is for validation argument for app store link and sharing

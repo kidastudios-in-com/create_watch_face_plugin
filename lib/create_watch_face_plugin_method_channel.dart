@@ -38,4 +38,10 @@ class MethodChannelCreateWatchFacePlugin extends CreateWatchFacePluginPlatform {
     final completion = await methodChannel.invokeMethod<bool>('open_app_in_store', appId);
     return completion ?? false;
   }
+
+  @override
+  Future<bool> shareThisApp({required String appId}) async {
+    final completion = await methodChannel.invokeMethod<bool>('share_this_app', appId);
+    return completion ?? false;
+  }
 }
