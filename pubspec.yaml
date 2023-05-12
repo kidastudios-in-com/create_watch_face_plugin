@@ -1,7 +1,7 @@
 name: create_watch_face_plugin
 description: A new Flutter plugin.
 version: 0.0.1
-homepage: ''
+homepage: 'https://github.com/kidastudios-in-com/create_watch_face_plugin'
 
 environment:
   sdk: '>=2.19.4 <3.0.0'
