@@ -48,4 +48,8 @@ abstract class CreateWatchFacePluginPlatform extends PlatformInterface {
   Future<bool> shareThisApp({required String appId}) {
     throw UnimplementedError('method has not been implemented.');
   }
+
+  Future<Map<String, dynamic>> getWatchConnectionDetails() {
+    throw UnimplementedError('method has not been implemented.');
+  }
 }

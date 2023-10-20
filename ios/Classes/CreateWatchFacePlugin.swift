@@ -1,6 +1,7 @@
-import Flutter
-import UIKit
 import ClockKit
+import Flutter
+import WatchConnectivity
+import UIKit
 
 public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
     // MARK: - function to get UIViewController
@@ -35,6 +36,11 @@ public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
             return
         }
         
+        if call.method == "watch_connection_info" {
+            result(WatchCoordinator.isWatchConnected())
+            return
+        }
+
         guard let rootViewController = CreateWatchFacePlugin.RootViewController() else {
             result(FlutterError(code: "No root view controller", message: "No root view controller found!", details: nil))
             return
@@ -63,6 +69,18 @@ public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
         }
         
         shareModel.validateArgumentsAndCallFunction("create_watch_face_plugin")
+    }
+}
+
+actor WatchCoordinator {
+    static func isWatchConnected() -> [String : Bool] {
+        let session: WCSession = .default
+        
+        let isPaired = session.isPaired
+        let isReachable = session.isReachable
+        let isWatchAppInstalled = session.isWatchAppInstalled
+
+        return ["isPaired" : isPaired, "isReachable" : isReachable, "isWatchAppInstalled" : isWatchAppInstalled]
     }
 }
 

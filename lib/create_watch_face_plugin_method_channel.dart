@@ -44,4 +44,10 @@ class MethodChannelCreateWatchFacePlugin extends CreateWatchFacePluginPlatform {
     final completion = await methodChannel.invokeMethod<bool>('share_this_app', appId);
     return completion ?? false;
   }
+
+  @override
+  Future<Map<String, dynamic>> getWatchConnectionDetails() async {
+    final completion = await methodChannel.invokeMapMethod<String, dynamic>("watch_connection_info");
+    return completion ?? {};
+  }
 }

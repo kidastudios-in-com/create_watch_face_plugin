@@ -27,4 +27,8 @@ class CreateWatchFacePlugin {
   Future<bool> shareThisApp({required String appId}) {
     return CreateWatchFacePluginPlatform.instance.shareThisApp(appId: appId);
   }
+
+  Future<Map<String, dynamic>> getWatchConnectionDetails() {
+    return CreateWatchFacePluginPlatform.instance.getWatchConnectionDetails();
+  }
 }
