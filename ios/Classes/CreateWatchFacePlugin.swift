@@ -37,7 +37,11 @@ public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
         }
         
         if call.method == "watch_connection_info" {
-            result(WatchCoordinator.isWatchConnected())
+            Task {
+                let coordinator: WatchCoordinator = .shared
+                let watchDetails = await coordinator.isWatchConnected()
+                result(watchDetails)
+            }
             return
         }
 
@@ -73,9 +77,11 @@ public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
 }
 
 actor WatchCoordinator {
-    static func isWatchConnected() -> [String : Bool] {
-        let session: WCSession = .default
-        
+    static let shared = WatchCoordinator()
+    
+    private let session: WCSession = .default
+    
+    func isWatchConnected() -> [String : Bool] {
         let isPaired = session.isPaired
         let isReachable = session.isReachable
         let isWatchAppInstalled = session.isWatchAppInstalled
@@ -147,9 +153,9 @@ class ShareModel {
         
         let watchFaceURL = URL(fileURLWithPath: arguments)
         watchFaceLibrary.addWatchFace(at: watchFaceURL) { err in
-            if err != nil {
-                self.result("Error: \(String(describing: err))")}
-            else {
+            if let err {
+                self.result("Error: \(err.localizedDescription)")
+            } else {
                 self.result("Success!")
             }
         }
