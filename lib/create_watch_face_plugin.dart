@@ -20,6 +20,10 @@ class CreateWatchFacePlugin {
     return CreateWatchFacePluginPlatform.instance.createWatchFaceButton(watchFace: watchFace);
   }
 
+  Future<String> createWatchFaceButtonWithFullURL({required dynamic watchFace}) {
+    return CreateWatchFacePluginPlatform.instance.createWatchFaceButtonFullURL(watchFace: watchFace);
+  }
+
   Future<bool> shareAppStoreLink({required String appId}) {
     return CreateWatchFacePluginPlatform.instance.shareAppStoreLink(appId: appId);
   }

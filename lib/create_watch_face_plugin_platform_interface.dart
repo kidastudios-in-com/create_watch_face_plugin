@@ -37,7 +37,11 @@ abstract class CreateWatchFacePluginPlatform extends PlatformInterface {
     throw UnimplementedError('method has not been implemented.');
   }
 
-  Future<String> createWatchFaceButton({required dynamic watchFace}) {
+  Future<String> createWatchFaceButton({required String watchFace}) {
+    throw UnimplementedError('method has not been implemented.');
+  }
+
+  Future<String> createWatchFaceButtonFullURL({required String watchFace}) {
     throw UnimplementedError('method has not been implemented.');
   }
 

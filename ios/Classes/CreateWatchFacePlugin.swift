@@ -44,7 +44,7 @@ public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
             }
             return
         }
-
+        
         guard let rootViewController = CreateWatchFacePlugin.RootViewController() else {
             result(FlutterError(code: "No root view controller", message: "No root view controller found!", details: nil))
             return
@@ -62,8 +62,13 @@ public class CreateWatchFacePlugin: NSObject, FlutterPlugin {
             return
         }
         
-        if call.method == "try_watch_face" {
+        if call.method == "try_watch_face_full_url" {
             shareModel.validateArgumentsForWatchFaceFile()
+            return
+        }
+        
+        if call.method == "try_watch_face" {
+            shareModel.validateArgumentsAndGetFromBundleForWatchFaceFile()
             return
         }
         
@@ -85,7 +90,7 @@ actor WatchCoordinator {
         let isPaired = session.isPaired
         let isReachable = session.isReachable
         let isWatchAppInstalled = session.isWatchAppInstalled
-
+        
         return ["isPaired" : isPaired, "isReachable" : isReachable, "isWatchAppInstalled" : isWatchAppInstalled]
     }
 }
@@ -137,6 +142,33 @@ class ShareModel {
             result(true)
         } else {
             result(FlutterError(code: "UNAVAILABLE", message: "Wrong id sent", details: nil))
+        }
+    }
+    
+    // MARK: - This function is for validating arguments for watch face file append flutter assets path and add that to watch
+    func validateArgumentsAndGetFromBundleForWatchFaceFile() {
+        if call.arguments == nil {
+            result(FlutterError(code: "UNAVAILABLE", message: "No Arguments sent", details: nil))
+            return
+        }
+        guard let bundlePath = call.arguments as? String else {
+            result(FlutterError(code: "UNAVAILABLE", message: "Arguments were of wrong type", details: nil))
+            return
+        }
+        
+        let bundle = Bundle.main
+        var url = bundle.bundleURL
+        // finding assets folder in app
+        url = url.appendingPathComponent("Frameworks/App.framework/flutter_assets")
+        // appending file path
+        url = url.appendingPathComponent(bundlePath)
+        
+        watchFaceLibrary.addWatchFace(at: url) { error in
+            if let err = error {
+                self.result("Error: \(err.localizedDescription)")
+            } else {
+                self.result("Success!")
+            }
         }
     }
     

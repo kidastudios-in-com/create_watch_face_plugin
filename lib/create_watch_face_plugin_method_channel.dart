@@ -28,8 +28,14 @@ class MethodChannelCreateWatchFacePlugin extends CreateWatchFacePluginPlatform {
   }
 
   @override
-  Future<String> createWatchFaceButton({required dynamic watchFace}) async {
+  Future<String> createWatchFaceButton({required String watchFace}) async {
     final completion = await methodChannel.invokeMethod<String>('try_watch_face', watchFace);
+    return completion.toString();
+  }
+
+  @override
+  Future<String> createWatchFaceButtonFullURL({required String watchFace}) async {
+    final completion = await methodChannel.invokeMethod<String>('try_watch_face_full_url', watchFace);
     return completion.toString();
   }
 
