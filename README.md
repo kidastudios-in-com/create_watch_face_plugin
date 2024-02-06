@@ -7,6 +7,10 @@ A Flutter plugin to install Apple WatchFaces.
 
 ## Installation
 - Add `create_watch_face_plugin` to your `pubspec.yaml`
+  ```yaml
+      create_watch_face_plugin:
+        git: https://github.com/kidastudios-in-com/create_watch_face_plugin
+  ```
 - Set iOS deployment level in `Podfile` to minimum: 14.0
   - `platform :ios, '14.0'`
 
