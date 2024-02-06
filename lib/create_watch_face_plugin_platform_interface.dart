@@ -29,30 +29,51 @@ abstract class CreateWatchFacePluginPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
+  /// Method to call `shareImage` method from swift
+  /// to share a single image.
+  /// - Required: [imageInBytes] the image's Binary data.
+  /// - Returns: `boolean` indicating did share or not
   Future<bool> shareImage({required Uint8List imageInBytes}) {
     throw UnimplementedError('method has not been implemented.');
   }
 
+  /// Method to call `shareImage` method from swift
+  /// to share a single image.
+  /// - Required: [imageInBytes] the image's Binary data.
+  /// - Returns: `boolean` indicating did share or not
   Future<bool> shareImages({required List<Uint8List> listOfImagesInBytes}) {
     throw UnimplementedError('method has not been implemented.');
   }
 
+  /// Method to invoke `CLKWatchFaceLibrary`'s `addWatchFace` method
+  /// - Required: [watchFace] the path to the watch face in flutter assets.
+  /// - Returns: "Success" or "Error" with the error description
   Future<String> createWatchFaceButton({required String watchFace}) {
     throw UnimplementedError('method has not been implemented.');
   }
 
+  /// Method to invoke `CLKWatchFaceLibrary`'s `addWatchFace` method
+  /// - Required: [watchFace] the full path to the watch face on device.
+  /// - Returns: "Success" or "Error" with the error description
   Future<String> createWatchFaceButtonFullURL({required String watchFace}) {
     throw UnimplementedError('method has not been implemented.');
   }
 
+  /// Method to open AppStore for the specific [appId].
+  /// - Returns: `boolean` indicating did share or not
   Future<bool> shareAppStoreLink({required String appId}) {
     throw UnimplementedError('method has not been implemented.');
   }
 
+  /// Method to share the link of this app.
+  /// - Required: [appId] for current
+  /// - Returns: `boolean` indicating did share or not
   Future<bool> shareThisApp({required String appId}) {
     throw UnimplementedError('method has not been implemented.');
   }
 
+  /// Method to invoke `WatchKit`'s details map from swift
+  /// - Returns: A `Map<String, dynamic>>` of the possible keys
   Future<Map<String, dynamic>> getWatchConnectionDetails() {
     throw UnimplementedError('method has not been implemented.');
   }
