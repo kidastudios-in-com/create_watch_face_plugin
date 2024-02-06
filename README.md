@@ -2,6 +2,7 @@
 
 A Flutter plugin to install Apple WatchFaces.
 
+[![Language](https://img.shields.io/badge/flutter-blue?logo=flutter)](https://flutter.dev/)
 [![License](https://img.shields.io/github/license/kidastudios-in-com/create_watch_face_plugin)](https://github.com/kidastudios-in-com/create_watch_face_plugin/blob/main/LICENSE)
 ![Flutter platform](https://img.shields.io/badge/flutter-ios-blue)
 
